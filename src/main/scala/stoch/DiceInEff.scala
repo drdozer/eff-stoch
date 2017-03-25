@@ -3,15 +3,18 @@ package stoch
 import cats.syntax.all._
 import cats.instances.all._
 import org.atnos.eff._
+import org.atnos.eff.syntax.all._
 import org.atnos.eff.all._
-import StochasticEffect._
+import stoch.StochasticEffect._
+import stoch.stochastic._
+
 
 import scala.util.Random
 
 /**
   * Created by nmrp3 on 25/03/17.
   */
-object Dice {
+object DiceInEff {
 
   case class TwoRolls(dice1: Int, dice2: Int) {
     def pretty: String = s"($dice1, $dice2) = ${dice1 + dice2}"
@@ -31,7 +34,7 @@ object Dice {
     type Stack = Fx1[Stochastic]
 
     for {
-      r <- run(runStochastic(new Random, roll5Times[Stack]))
+      r <- roll5Times[Stack].runStochastic(new Random()).run
     } println(s"Dice roll: ${r.pretty}")
   }
 
